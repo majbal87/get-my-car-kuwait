@@ -1,0 +1,547 @@
+<title>/*TITLE*/</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Arabic:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#E3E8ED; --ink:#15212C; --muted:#5A6978; --line:#D3DAE1;
+  --accent:#0A7A52; --accent-ink:#FFFFFF; --accent-soft:#DDF1E8;
+  --warn:#9A5B00; --warn-soft:#FBEBD3; --bad:#B42318;
+  --odo-bg:#15212C; --odo-ink:#F4F7F9;
+  --shadow:0 1px 2px rgba(21,33,44,.06),0 6px 18px rgba(21,33,44,.07);
+  --display:"Barlow Condensed","IBM Plex Sans Arabic","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans","IBM Plex Sans Arabic",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0E141A; --surface:#161F28; --surface-2:#1F2A35; --ink:#E6ECF1; --muted:#98A6B3; --line:#2A3743;
+  --accent:#39C28A; --accent-ink:#06261A; --accent-soft:#143528;
+  --warn:#F0B34F; --warn-soft:#3A2B12; --bad:#FF7A6E;
+  --odo-bg:#05090D; --odo-ink:#E6ECF1;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.3);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E141A; --surface:#161F28; --surface-2:#1F2A35; --ink:#E6ECF1; --muted:#98A6B3; --line:#2A3743;
+  --accent:#39C28A; --accent-ink:#06261A; --accent-soft:#143528;
+  --warn:#F0B34F; --warn-soft:#3A2B12; --bad:#FF7A6E;
+  --odo-bg:#05090D; --odo-ink:#E6ECF1;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 22px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:0 48px}
+.wrap{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0;line-height:1.05}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+header.top{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding-block:28px 20px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:clamp(40px,7vw,68px);text-transform:uppercase}
+h1 span{color:var(--accent)}
+.lede{color:var(--muted);max-width:60ch;margin:8px 0 0}
+.stat{margin:10px 0 0;font-size:13px;color:var(--ink);font-weight:500}
+.stat b{color:var(--accent)}
+.also{font-size:12px;color:var(--muted);margin:0}
+.alsolist{display:flex;gap:8px;flex-wrap:wrap;font-size:13px}
+.alsolist a{background:var(--surface-2);border-radius:6px;padding:4px 10px;text-decoration:none}
+.warnbox{margin:0 0 8px;border-radius:10px;background:var(--warn-soft);color:var(--warn);padding:10px 14px;font-size:14px;font-weight:500}
+.warnbox p{margin:0}
+.budget{background:var(--odo-bg);color:var(--odo-ink);border-radius:10px;padding:12px 16px;text-align:end;min-width:170px}
+.budget small{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.budget b{font-family:var(--mono);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+
+/* picks */
+section{margin-top:28px}
+.sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sec-head h2{font-size:28px;text-transform:uppercase}
+.sec-head p{margin:0;color:var(--muted);font-size:13px}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(260px,300px);gap:14px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.rail .card{scroll-snap-align:start}
+
+/* filters */
+.filters{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px;border-bottom:1px solid var(--line);display:grid;gap:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;font-weight:500}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .n{opacity:.6;font-variant-numeric:tabular-nums;margin-inline-start:4px}
+.ctl{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.ctl input[type=range]{accent-color:var(--accent);width:160px}
+.ctl output{font-family:var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;min-width:74px}
+select{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px}
+.count{margin-inline-start:auto;font-size:13px;color:var(--muted)}
+
+/* grid + card */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:16px}
+.card{background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;cursor:pointer;text-align:start;border:0;padding:0;transition:transform .15s ease}
+.card:hover{transform:translateY(-2px)}
+.ph{position:relative;aspect-ratio:4/3;background:var(--surface-2);max-width:100%}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .tag{position:absolute;inset-inline-start:10px;top:10px;background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.ph .pc{position:absolute;inset-inline-end:10px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:2px 7px;border-radius:4px}
+.fav{position:absolute;inset-inline-end:8px;top:8px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:#15212C;display:grid;place-items:center;cursor:pointer}
+.fav svg{width:18px;height:18px}
+.fav[aria-pressed="true"]{color:#D92D20}
+.fav[aria-pressed="true"] path{fill:currentColor}
+.body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.name{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.name h3{font-size:22px}
+.price{font-family:var(--mono);font-size:16px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.price small{font-family:var(--body);font-size:11px;color:var(--muted);margin-inline-start:3px}
+.meta{display:flex;gap:6px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.meta span{background:var(--surface-2);border-radius:4px;padding:2px 6px}
+.odo{display:inline-flex;gap:2px;font-family:var(--mono);font-size:13px;font-variant-numeric:tabular-nums}
+.odo i{font-style:normal;background:var(--odo-bg);color:var(--odo-ink);padding:1px 3px;border-radius:2px;min-width:1ch;text-align:center}
+.odo em{font-style:normal;color:var(--muted);margin-inline-start:4px;font-size:11px;align-self:center}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;font-size:12px;color:var(--muted)}
+.rel{display:inline-flex;gap:2px;align-items:center}
+.rel b{width:10px;height:6px;border-radius:1px;background:var(--line)}
+.rel b.on{background:var(--accent)}
+.rel span{margin-inline-start:6px}
+.pickwhy{font-size:13px;color:var(--ink);background:var(--accent-soft);border-radius:6px;padding:6px 8px;margin:0}
+.flag{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:5px 8px;margin:0}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}
+
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.gloss div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.gloss .ar{font-family:"IBM Plex Sans Arabic",var(--body);font-size:18px;direction:rtl;display:block;font-weight:500}
+.gloss p{margin:4px 0 0;font-size:13px;color:var(--muted)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(8,12,16,.55);z-index:20;display:grid;place-items:center;padding:16px}
+.scrim[hidden]{display:none}
+.sheet{background:var(--surface);color:var(--ink);border-radius:14px;width:min(860px,100%);max-height:calc(100% - 16px);overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.gal{position:relative;background:#000}
+.gal img{width:100%;max-height:52vh;object-fit:contain;display:block}
+.gal .nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#15212C;cursor:pointer;font-size:20px}
+.gal .prev{left:10px}.gal .next{right:10px}
+.gal .close{position:absolute;inset-inline-end:10px;top:10px;border:0;border-radius:999px;background:rgba(255,255,255,.9);color:#15212C;padding:6px 12px;cursor:pointer;font-weight:600;font-size:13px}
+.thumbs{display:flex;gap:6px;padding:8px;background:var(--surface-2);overflow-x:auto}
+.thumbs button{border:2px solid transparent;padding:0;border-radius:6px;overflow:hidden;cursor:pointer;flex:none;width:72px;height:54px;background:none}
+.thumbs button[aria-current="true"]{border-color:var(--accent)}
+.thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.sbody{padding:18px 20px 22px;display:grid;gap:16px}
+.shead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.shead h2{font-size:34px}
+.shead .price{font-size:22px}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.specs div{background:var(--surface);padding:8px 10px}
+.specs dt{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.specs dd{margin:2px 0 0;font-weight:600;font-variant-numeric:tabular-nums}
+.feats{display:flex;gap:6px;flex-wrap:wrap}
+.feats span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px}
+.box h4{margin:0 0 4px;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.box p{margin:0;font-size:14px}
+.box.check{border-color:var(--warn);background:var(--warn-soft)}
+.orig{text-align:start;font-family:"IBM Plex Sans Arabic",var(--body);background:var(--surface-2);border-radius:10px;padding:12px;margin:0;white-space:pre-wrap;font-size:14px}
+.cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;padding:10px 16px;border-radius:8px;border:0;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.src{font-size:12px;color:var(--muted)}
+.contact{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.btn.sm{padding:7px 12px;font-size:13px}
+.masked{font-size:12px;color:var(--muted)}
+.reading{margin-top:28px;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0 14px}
+.reading summary{cursor:pointer;padding:12px 0;font-size:13px;font-weight:600;color:var(--muted)}
+.reading ul{margin:0 0 14px;padding-inline-start:18px;font-size:14px;display:grid;gap:4px}
+footer{margin-top:36px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:640px){
+  header.top{grid-template-columns:1fr}
+  .budget{text-align:start}
+  .two{grid-template-columns:1fr}
+  .scrim{padding:0;align-items:end}
+  .sheet{border-radius:14px 14px 0 0;max-height:92%}
+  .ctl input[type=range]{width:120px}
+  .count{margin-inline-start:0;width:100%}
+}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.toggles{display:flex;gap:8px}
+.theme{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;font-size:14px;color:var(--ink)}
+.lang{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.odo{direction:ltr}
+[dir=rtl] h1{letter-spacing:0}
+[dir=rtl] .eyebrow{letter-spacing:0}
+@media (max-width:720px){.side{align-items:flex-start}}
+@media (prefers-reduced-motion:reduce){.card{transition:none}.card:hover{transform:none}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="h1"></h1>
+      <p class="lede" id="lede"></p>
+      <p class="stat" id="stat"></p>
+    </div>
+    <div class="side"><div class="toggles"><button class="theme" id="theme"></button><button class="lang" id="lang" lang="ar"></button></div><div class="budget"><small data-t="budget"></small><b id="budget"></b></div></div>
+  </header>
+  <div class="warnbox" id="warn" role="alert" hidden></div>
+
+  <section id="picks">
+    <div class="sec-head"><h2 data-t="top_picks"></h2><p id="pickline"></p></div>
+    <div class="rail" id="rail"></div>
+  </section>
+
+  <section id="all">
+    <div class="filters">
+      <div class="row" id="brands" role="group" aria-label="Brand"></div>
+      <div class="row">
+        <div class="row" id="bodies" role="group" aria-label="Body type"></div>
+        <label class="ctl" for="maxp"><span data-t="max"></span> <input type="range" id="maxp" min="500" max="5000" step="100" value="5000"><output id="maxpo"></output></label>
+        <label class="ctl" for="miny"><span data-t="from"></span> <select id="miny"></select></label>
+        <label class="ctl" for="sort"><span data-t="sort"></span> <select id="sort">
+          <option value="pick" data-t="s_pick"></option>
+          <option value="price" data-t="s_price"></option>
+          <option value="year" data-t="s_year"></option>
+          <option value="km" data-t="s_km"></option>
+          <option value="rel" data-t="s_rel"></option>
+        </select></label>
+        <button class="chip" id="favonly" aria-pressed="false"><span data-t="saved"></span> <span class="n" id="favn">0</span></button>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section id="terms">
+    <div class="sec-head"><h2>Reading a Kuwaiti car ad</h2><p>Terms you will see in the listings</p></div>
+    <div class="gloss">
+      <div><span class="ar">شرط الفحص</span><p>Sale is conditional on inspection. You can take the car for a check of the gearbox, engine and chassis (قير، مكينة، شاصي) before paying.</p></div>
+      <div><span class="ar">صبغ الوكالة</span><p>Original factory paint. The car has not been resprayed, which usually means no major body repairs.</p></div>
+      <div><span class="ar">وارد الساير / الوكالة</span><p>Sold new by the Kuwait agency (Al-Sayer for Toyota and Lexus, Al-Ghanim for Honda, Al-Mulla for Mitsubishi, Al-Babtain for Nissan).</p></div>
+      <div><span class="ar">ماشي ٢٠٠</span><p>Mileage is often written in thousands: "ماشي 200" means 200,000 km on the odometer.</p></div>
+    </div>
+  </section>
+
+  <details class="reading" id="reading" hidden><summary data-t="reading"></summary><ul id="readlist"></ul></details>
+
+  <footer id="foot"></footer>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sname" id="sheet"></div>
+</div>
+
+<script>
+const DATA = /*DATA*/;
+// Arabic counts: 3 to 10 take the plural (5 إعلانات), other numbers the singular (1, 11, 29 إعلان)
+const few = n => { n = +String(n).replace(/\D/g, '') % 100; return n >= 3 && n <= 10; };
+// English / Arabic. Claude's own text has an *_ar twin (meta, pick, flag, model note/check); English is the fallback.
+const I18N = {
+  en: {
+    lang_btn: 'العربية', to_light: 'Light mode', to_dark: 'Dark mode', budget: 'Budget', top_picks: 'Top picks', max: 'Max', from: 'From', sort: 'Sort',
+    s_pick: 'Top picks first', s_price: 'Price: low to high', s_year: 'Newest first', s_km: 'Lowest mileage', s_rel: 'Most reliable model',
+    saved: '♥ Saved', all: 'All', any_year: 'Any year', kd: 'KD', km: 'km', reading: 'How this search was read',
+    empty: 'No cars match these filters. Try raising the price or clearing a filter.',
+    count: (n, t) => `${n} of ${t} cars`, seats: n => `${n} seats`, photos: n => `${n} photos`,
+    kuwait_car: 'Kuwait car', top_pick: 'Top pick', top_pick_p: 'Top pick: ',
+    also_on: s => `Also listed on ${s}`, same_car: 'Same car, also listed on',
+    open_ad: 'Open ad ↗', open_ad_on: s => `Open ad on ${s} ↗`, full_on_ad: 'full number on the ad', motorgy: 'Motorgy ',
+    save: '♡ Save', saved_btn: '♥ Saved', save_aria: 'Save this car', close: 'Close ✕', prev: 'Previous photo', next: 'Next photo', photo: 'Photo',
+    mileage: 'Mileage', year: 'Year', engine: 'Engine', gearbox: 'Gearbox', colour: 'Colour', origin: 'Origin', bodycond: 'Body', reliability: 'Reliability',
+    about: 'About this model', check: 'Check before buying', seller_ad: "Seller's ad", posted: 'Posted ', dealer: 'dealer',
+    rel_words: ['', 'Weak', 'Fair', 'Good', 'Very good', 'Excellent'], rel_title: n => `Our reliability take: ${n} of 5`,
+    sites: (n, names) => `${n} sites (${names})`,
+    miss: (s, m) => `⚠ We couldn't check ${s} for ${m}, so its cars are missing from this page. It may still have some for sale.`,
+    miss_some: s => `⚠ Some ${s} pages couldn't be read, so a few of its cars may be missing from this page.`,
+    stat: (ads, sites, d, n) => `${ads} ads checked on ${sites} · <b>${d}</b> duplicate ads merged · ${n} cars shown`,
+    foot: (when, src) => `Listings collected on ${when} from ${src}. The same car listed on several sites is shown once, with links to the other ads. Call buttons use the number on the ad; Motorgy's number is Motorgy's own sales line. Prices are the sellers' asking prices, and ads may already be sold. Reliability ratings and notes are our own summary of each model's reputation, not a guarantee for any single car. Always do the inspection (شرط الفحص) before paying.`,
+    vals: {},
+  },
+  ar: {
+    lang_btn: 'English', to_light: 'الوضع الفاتح', to_dark: 'الوضع الداكن', budget: 'الميزانية', top_picks: 'أفضل الاختيارات', max: 'الحد الأعلى', from: 'من سنة', sort: 'الترتيب',
+    s_pick: 'أفضل الاختيارات أولاً', s_price: 'السعر: من الأقل', s_year: 'الأحدث أولاً', s_km: 'الأقل ممشى', s_rel: 'الأكثر اعتمادية',
+    saved: '♥ المحفوظة', all: 'الكل', any_year: 'أي سنة', kd: 'د.ك', km: 'كم', reading: 'كيف فهمنا طلبك',
+    empty: 'لا توجد سيارات تطابق هذه الخيارات. جرّب رفع السعر أو إلغاء أحد الفلاتر.',
+    count: (n, t) => `${n} من ${t} ${few(t) ? 'سيارات' : 'سيارة'}`, seats: n => `${n} مقاعد`, photos: n => `${n} ${few(n) ? 'صور' : 'صورة'}`,
+    kuwait_car: 'وكالة الكويت', top_pick: 'اختيار مميز', top_pick_p: 'اختيار مميز: ',
+    also_on: s => `معروضة أيضاً في ${s}`, same_car: 'نفس السيارة معروضة أيضاً في',
+    open_ad: 'فتح الإعلان ↗', open_ad_on: s => `فتح الإعلان في ${s} ↗`, full_on_ad: 'الرقم كامل في الإعلان', motorgy: 'موتورجي ',
+    save: '♡ حفظ', saved_btn: '♥ محفوظة', save_aria: 'احفظ هذه السيارة', close: 'إغلاق ✕', prev: 'الصورة السابقة', next: 'الصورة التالية', photo: 'صورة',
+    mileage: 'الممشى', year: 'السنة', engine: 'المحرك', gearbox: 'القير', colour: 'اللون', origin: 'المصدر', bodycond: 'الهيكل', reliability: 'الاعتمادية',
+    about: 'عن هذا الموديل', check: 'افحص قبل الشراء', seller_ad: 'إعلان البائع', posted: 'نُشر ', dealer: 'معرض',
+    rel_words: ['', 'ضعيفة', 'مقبولة', 'جيدة', 'جيدة جداً', 'ممتازة'], rel_title: n => `تقييمنا للاعتمادية: ${n} من 5`,
+    sites: (n, names) => `${n} ${few(n) ? 'مواقع' : 'موقع'} (<bdi>${names}</bdi>)`,
+    miss: (s, m) => `⚠ لم نتمكن من فحص ${s} لـ ${m}، لذلك سياراته غير موجودة في هذه الصفحة. قد تكون فيه سيارات للبيع.`,
+    miss_some: s => `⚠ تعذّرت قراءة بعض صفحات ${s}، لذلك قد تنقص بعض سياراته من هذه الصفحة.`,
+    stat: (ads, sites, d, n) => `تم فحص ${ads} ${few(ads) ? 'إعلانات' : 'إعلان'} في ${sites} · تم دمج <b>${d}</b> ${few(d) ? 'إعلانات مكررة' : 'إعلان مكرر'} · ${n} ${few(n) ? 'سيارات معروضة' : 'سيارة معروضة'}`,
+    foot: (when, src) => `جُمعت الإعلانات بتاريخ ${when} من ${src}. السيارة المعروضة في أكثر من موقع تظهر مرة واحدة مع روابط الإعلانات الأخرى. أزرار الاتصال تستخدم الرقم المكتوب في الإعلان، ورقم موتورجي هو رقم مبيعات موتورجي نفسها. الأسعار هي الأسعار المطلوبة من البائعين، وقد تكون بعض السيارات بيعت. تقييم الاعتمادية والملاحظات هي ملخصنا لسمعة كل موديل، وليست ضماناً لأي سيارة بعينها. اشترط الفحص دائماً قبل الدفع.`,
+    // words that come from the sites or models.json
+    vals: {
+      'SUV': 'جيب', 'Small SUV': 'جيب صغير', 'Sedan': 'سيدان', 'MPV': 'عائلية (MPV)', 'Minivan': 'ميني فان', 'Sports': 'رياضية', 'Coupe': 'كوبيه', 'Pickup': 'بيك أب',
+      'Van': 'فان', 'Mini Van': 'ميني فان', 'Hatchback': 'هاتشباك', 'Convertible': 'مكشوفة', 'Cabriolet': 'مكشوفة', 'Wagon': 'ستيشن',
+      'Sports Car': 'رياضية', 'Truck': 'شاحنة', 'Mixed': 'متنوعة', 'Other': 'أخرى',
+      'Excellent, No defects': 'ممتازة، بدون عيوب', 'Good, Minor blemishes': 'جيدة، عيوب بسيطة',
+      'Tiptronic': 'تيبترونيك', 'Gulf': 'خليجي', 'USA': 'أمريكي', 'Japan': 'ياباني',
+      'Automatic': 'أوتوماتيك', 'Manual': 'عادي', 'Kuwait': 'الكويت',
+      'White': 'أبيض', 'Black': 'أسود', 'Silver': 'فضي', 'Grey': 'رمادي', 'Gray': 'رمادي', 'Red': 'أحمر', 'Blue': 'أزرق', 'Green': 'أخضر',
+      'Brown': 'بني', 'Beige': 'بيج', 'Gold': 'ذهبي', 'Orange': 'برتقالي', 'Yellow': 'أصفر', 'Pearl White': 'أبيض لؤلؤي',
+      'Bronze': 'برونزي', 'Golden': 'ذهبي', 'Dark Blue': 'أزرق غامق', 'Navy': 'كحلي', 'Maroon': 'عنابي', 'Burgundy': 'عنابي', 'Olive': 'زيتي',
+      'Inspection allowed': 'شرط الفحص', 'Original paint': 'صبغ الوكالة', 'Regular service': 'سيرفس منتظم', 'First owner': 'المالك الأول',
+      'Kuwait agency car': 'وارد الوكالة', 'Sunroof': 'فتحة سقف', 'Leather': 'جلد', 'Camera': 'كاميرا', 'Push start': 'بصمة', '4x4': 'دبل',
+      'New tyres': 'تواير جديدة', 'Cool box': 'ثلاجة', 'No accidents claimed': 'بدون حوادث (حسب البائع)', 'Installments': 'أقساط', 'Warranty': 'ضمان',
+    },
+  },
+};
+const Q = new URLSearchParams(location.search);  // ?lang=ar / ?theme=light: build.py's screenshots
+let lang = DATA.meta.lang === 'ar' ? 'ar' : 'en';
+try { lang = localStorage.getItem('cs-lang') || lang; } catch (e) {}
+if (['en', 'ar'].includes(Q.get('lang'))) lang = Q.get('lang');
+const t = (k, ...a) => { const v = I18N[lang][k] ?? I18N.en[k]; return typeof v === 'function' ? v(...a) : v; };
+const tv = v => (lang === 'ar' && I18N.ar.vals[v]) || v;           // a site / models.json word
+const L = (o, f) => (lang === 'ar' && o?.[f + '_ar']) || o?.[f];   // Claude's text, Arabic twin when there is one
+const CARS = DATA.cars, MODELS = DATA.models, META = DATA.meta;
+const fmt = n => (n ?? 0).toLocaleString('en-US');
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const heart = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8.2 3.2 4.5 6.9 4.5c2.1 0 3.6 1.2 5.1 3 1.5-1.8 3-3 5.1-3 3.7 0 5.9 3.7 4.4 7.2C19.5 16.4 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
+
+let favs = new Set();
+try { favs = new Set(JSON.parse(localStorage.getItem('cs-favs') || '[]')); } catch (e) {}
+const saveFavs = () => { try { localStorage.setItem('cs-favs', JSON.stringify([...favs])); } catch (e) {} };
+
+const state = { brand: 'All', body: 'All', maxp: META.budget, miny: 0, sort: 'pick', favOnly: false };
+
+function odo(km) {
+  return `<span class="odo"><i>${fmt(km)}</i><em>${t('km')}</em></span>`;
+}
+// `rel` is 1–5 (bars and a word), or Claude's own text, shown as written.
+const relN = r => [1, 2, 3, 4, 5].includes(+r) ? +r : 0;
+function rel(m) {
+  const r = L(m, 'rel'), n = relN(m.rel);
+  if (!n) return `<span class="rel"><span>${esc(r)}</span></span>`;
+  return `<span class="rel" title="${esc(t('rel_title', n))}">${[1,2,3,4,5].map(i => `<b class="${i <= n ? 'on' : ''}"></b>`).join('')}<span>${t('rel_words')[n]}</span></span>`;
+}
+// Seller's phone as a call button. OpenSooq hides the last 2 digits: the full number is on the ad.
+function phoneBtn(c, small) {
+  const p = c.phone;
+  if (!p) return '';
+  const d = p.replace(/\?/g, '•').replace(/^(\S{4})/, '$1 ');
+  if (p.includes('?')) return `<span class="masked">☎ <bdi dir="ltr">${esc(d)}</bdi> · ${t('full_on_ad')}</span>`;
+  return `<a class="btn${small ? ' sm' : ''}" href="tel:+965${esc(p)}">☎ ${c.source === 'Motorgy' ? t('motorgy') : ''}<bdi dir="ltr">${esc(d)}</bdi></a>`;
+}
+function card(c) {
+  const m = MODELS[c.model];
+  return `<article class="card" tabindex="0" data-id="${c.id}" aria-label="${esc(c.year + ' ' + c.name + ', ' + fmt(c.price) + ' KD')}">
+    <div class="ph">
+      <img ${c.imgs[0] ? `src="${c.imgs[0]}"` : `data-more="${c.id}"`} alt="${esc(c.year + ' ' + c.name)}" loading="lazy">
+      ${c.pick ? `<span class="tag">${t('top_pick')}</span>` : ''}
+      <button class="fav" data-fav="${c.id}" aria-pressed="${favs.has(c.id)}" aria-label="${t('save_aria')}">${heart}</button>
+      ${c.n > 1 ? `<span class="pc">${t('photos', c.n)}</span>` : ''}
+    </div>
+    <div class="body">
+      <div class="name"><h3>${c.year} ${esc(c.trim || m.name.replace(c.brand + ' ', '').replace(/^Land Cruiser Prado$/, 'Prado'))}</h3><span class="price">${fmt(c.price)}<small>${t('kd')}</small></span></div>
+      <div class="meta"><span>${esc(c.brand)}</span><span>${esc(tv(m.body))}</span><span>${esc(t('seats', c.seats || m.seats))}</span>${c.imp ? `<span>${esc(c.imp === 'Kuwait' ? t('kuwait_car') : tv(c.imp))}</span>` : ''}<span>${esc(c.source)}</span></div>
+      ${c.also?.length ? `<p class="also">${esc(t('also_on', [...new Set(c.also.map(a => a.source))].join(lang === 'ar' ? '، ' : ', ')))}</p>` : ''}
+      ${c.pick ? `<p class="pickwhy">${esc(L(c, 'pick'))}</p>` : ''}
+      ${c.flag ? `<p class="flag">${esc(L(c, 'flag'))}</p>` : ''}
+      <div class="foot">${odo(c.km)}${rel(m)}</div>
+      <div class="contact">${phoneBtn(c, true)}<a class="btn sm ghost" href="${esc(c.url)}" target="_blank" rel="noopener">${t('open_ad')}</a></div>
+    </div>
+  </article>`;
+}
+
+function filtered() {
+  let list = CARS.filter(c =>
+    (state.brand === 'All' || c.brand === state.brand) &&
+    (state.body === 'All' || MODELS[c.model].body === state.body) &&
+    c.price <= state.maxp && c.year >= state.miny &&
+    (!state.favOnly || favs.has(c.id)));
+  const by = {
+    pick: (a, b) => (!!b.pick - !!a.pick) || byRank(a, b),
+    price: (a, b) => a.price - b.price,
+    year: (a, b) => b.year - a.year || a.km - b.km,
+    km: (a, b) => a.km - b.km,
+    rel: (a, b) => relN(MODELS[b.model].rel) - relN(MODELS[a.model].rel) || b.year - a.year,
+  }[state.sort];
+  return list.sort(by);
+}
+
+function chips(el, key, values) {
+  el.innerHTML = values.map(([v, n]) => `<button class="chip" data-${key}="${esc(v)}" aria-pressed="${state[key] === v}"><bdi>${esc(v === 'All' ? t('all') : tv(v))}</bdi><span class="n">${n}</span></button>`).join('');
+}
+
+function render() {
+  const brands = [...new Set(CARS.map(c => c.brand))];
+  chips(document.getElementById('brands'), 'brand', [['All', CARS.length], ...brands.map(b => [b, CARS.filter(c => c.brand === b).length])]);
+  const bodies = [...new Set(CARS.map(c => MODELS[c.model].body))];
+  chips(document.getElementById('bodies'), 'body', [['All', CARS.length], ...bodies.map(b => [b, CARS.filter(c => MODELS[c.model].body === b).length])]);
+  const list = filtered();
+  document.getElementById('grid').innerHTML = list.length ? list.map(card).join('') : `<p class="empty">${t('empty')}</p>`;
+  document.getElementById('count').textContent = t('count', list.length, CARS.length);
+  document.getElementById('favn').textContent = favs.size;
+  document.getElementById('favonly').setAttribute('aria-pressed', state.favOnly);
+  covers();
+}
+
+// Top picks in the order Claude ranked them (`rank` 1, 2, 3…); without ranks, reliability then year.
+const byRank = (a, b) => (a.rank || 99) - (b.rank || 99) || relN(MODELS[b.model].rel) - relN(MODELS[a.model].rel) || b.year - a.year;
+function renderRail() {
+  document.getElementById('rail').innerHTML = CARS.filter(c => c.pick).sort(byRank).map(card).join('');
+  covers();
+}
+
+// detail sheet
+let cur = null, idx = 0;
+function openCar(id) {
+  cur = CARS.find(c => c.id === id); idx = 0;
+  const c = cur, m = MODELS[c.model];
+  document.getElementById('sheet').innerHTML = `
+    <div id="galwrap">${gallery(c)}</div>
+    <div class="sbody">
+      <div class="shead">
+        <div><div class="eyebrow">${esc(c.brand)} · ${esc(tv(m.body))} · ${esc(t('seats', c.seats || m.seats))}</div><h2 id="sname">${c.year} ${esc(c.trim ? c.brand + ' ' + c.trim : m.name)}</h2></div>
+        <span class="price">${fmt(c.price)}<small>${t('kd')}</small></span>
+      </div>
+      ${c.pick ? `<p class="pickwhy">${t('top_pick_p')}${esc(L(c, 'pick'))}</p>` : ''}
+      ${c.flag ? `<p class="flag">${esc(L(c, 'flag'))}</p>` : ''}
+      <dl class="specs">
+        <div><dt>${t('mileage')}</dt><dd>${fmt(c.km)} ${t('km')}</dd></div>
+        <div><dt>${t('year')}</dt><dd>${c.year}</dd></div>
+        <div><dt>${t('engine')}</dt><dd>${esc(m.engine)}</dd></div>
+        <div><dt>${t('gearbox')}</dt><dd>${esc(tv(c.trans))}</dd></div>
+        ${c.color ? `<div><dt>${t('colour')}</dt><dd>${esc(tv(c.color))}</dd></div>` : ''}
+        ${c.imp ? `<div><dt>${t('origin')}</dt><dd>${esc(tv(c.imp))}</dd></div>` : ''}
+        ${c.cond ? `<div><dt>${t('bodycond')}</dt><dd>${esc(tv(c.cond.replace(/\s+/g, ' ')))}</dd></div>` : ''}
+        <div><dt>${t('reliability')}</dt><dd>${rel(m)}</dd></div>
+      </dl>
+      ${c.features.length ? `<div class="feats">${c.features.map(f => `<span>${esc(tv(f))}</span>`).join('')}</div>` : ''}
+      <div class="two">
+        <div class="box"><h4>${t('about')}</h4><p>${esc(L(m, 'note'))}</p></div>
+        <div class="box check"><h4>${t('check')}</h4><p>${esc(L(m, 'check'))}</p></div>
+      </div>
+      <div><div class="eyebrow" style="margin-bottom:6px">${t('seller_ad')}</div><p class="orig" dir="auto">${esc(c.title)}${c.desc && c.desc !== c.title ? '\n\n' + esc(c.desc) : ''}</p></div>
+      ${c.also?.length ? `<div><div class="eyebrow" style="margin-bottom:6px">${t('same_car')}</div><div class="alsolist">${c.also.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.source)} · ${fmt(a.price)} ${t('kd')}${a.phone && !a.phone.includes('?') ? ' · ☎ <bdi dir="ltr">' + esc(a.phone) + '</bdi>' : ''} ↗</a>`).join('')}</div></div>` : ''}
+      <div class="cta">
+        ${phoneBtn(c)}
+        <a class="btn${c.phone && !c.phone.includes('?') ? ' ghost' : ''}" href="${esc(c.url)}" target="_blank" rel="noopener">${esc(t('open_ad_on', c.source))}</a>
+        <button class="btn ghost" data-fav="${c.id}" aria-pressed="${favs.has(c.id)}">${favs.has(c.id) ? t('saved_btn') : t('save')}</button>
+        <span class="src">${c.posted ? t('posted') + esc(c.posted) : ''}${c.dealer ? ' · ' + t('dealer') : ''}</span>
+      </div>
+    </div>`;
+  document.getElementById('scrim').hidden = false;
+  document.body.style.overflow = 'hidden';
+  document.querySelector('#sheet .close').focus();
+  if (!c.imgs.length) photos(c).then(() => {
+    if (cur !== c) return;
+    const f = document.activeElement?.closest('#galwrap');
+    document.getElementById('galwrap').innerHTML = gallery(c);
+    if (f) document.querySelector('#sheet .close').focus();
+  });
+}
+function gallery(c) {
+  return `<div class="gal">
+      <img id="gimg" src="${c.imgs[idx] || ''}" alt="${esc(c.year + ' ' + c.name)}">
+      ${c.imgs.length > 1 ? `<button class="nav prev" data-nav="-1" aria-label="${t('prev')}">‹</button><button class="nav next" data-nav="1" aria-label="${t('next')}">›</button>` : ''}
+      <button class="close" data-close>${t('close')}</button>
+    </div>
+    ${c.imgs.length > 1 ? `<div class="thumbs">${c.imgs.map((s, i) => `<button data-th="${i}" aria-current="${i === idx}" aria-label="${t('photo')} ${i + 1}"><img src="${s}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}`;
+}
+// Claude.ai page: each car's photos are one file (ph/<id>.json), loaded when its card comes into view.
+const loads = {};
+const photos = c => loads[c.id] ??= c.more ? fetch(c.more).then(r => r.json()).then(p => { c.imgs = p; }).catch(() => {}) : Promise.resolve();
+const seen = 'IntersectionObserver' in window && new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  seen.unobserve(e.target);
+  const c = CARS.find(x => x.id === e.target.dataset.more);
+  photos(c).then(() => { if (c.imgs[0]) e.target.src = c.imgs[0]; });
+}), { rootMargin: '600px' });
+const covers = () => seen && document.querySelectorAll('img[data-more]').forEach(i => seen.observe(i));
+function showImg(i) {
+  idx = (i + cur.imgs.length) % cur.imgs.length;
+  document.getElementById('gimg').src = cur.imgs[idx];
+  document.querySelectorAll('.thumbs button').forEach((b, j) => b.setAttribute('aria-current', j === idx));
+}
+function closeSheet() { document.getElementById('scrim').hidden = true; document.body.style.overflow = ''; cur = null; }
+
+function toggleFav(id) {
+  favs.has(id) ? favs.delete(id) : favs.add(id); saveFavs();
+  render(); renderRail();
+  if (cur && cur.id === id) openCar(id);
+}
+
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (t.closest('a[href]')) return;  // call and ad links work as links, not as "open this car"
+  const f = t.closest('[data-fav]'); if (f) { e.stopPropagation(); toggleFav(f.dataset.fav); return; }
+  const b = t.closest('[data-brand]'); if (b) { state.brand = b.dataset.brand; render(); return; }
+  const bo = t.closest('[data-body]'); if (bo) { state.body = bo.dataset.body; render(); return; }
+  if (t.closest('#favonly')) { state.favOnly = !state.favOnly; render(); return; }
+  if (t.closest('[data-close]') || t.id === 'scrim') { closeSheet(); return; }
+  const n = t.closest('[data-nav]'); if (n) { showImg(idx + +n.dataset.nav); return; }
+  const th = t.closest('[data-th]'); if (th) { showImg(+th.dataset.th); return; }
+  const c = t.closest('.card'); if (c) openCar(c.dataset.id);
+});
+document.addEventListener('keydown', e => {
+  if (cur) {
+    if (e.key === 'Escape') closeSheet();
+    if (e.key === 'ArrowRight') showImg(idx + 1);
+    if (e.key === 'ArrowLeft') showImg(idx - 1);
+  } else if (e.key === 'Enter' && e.target.classList?.contains('card')) openCar(e.target.dataset.id);
+});
+// every page text, redrawn when the language changes
+const ST = META.stats || {};
+function texts() {
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
+  document.getElementById('lang').textContent = t('lang_btn');
+  themeBtn();
+  document.getElementById('lang').lang = lang === 'ar' ? 'en' : 'ar';
+  document.getElementById('eyebrow').textContent = L(META, 'eyebrow');
+  document.getElementById('h1').innerHTML = esc(L(META, 'h1')) + (META.h1_accent ? ' <span>' + esc(L(META, 'h1_accent')) + '</span>' : '');
+  document.getElementById('lede').textContent = L(META, 'lede');
+  document.getElementById('stat').innerHTML = ST.ads ? t('stat', fmt(ST.ads), t('sites', ST.n_sites, esc(ST.site_names)), fmt(ST.dupes), CARS.length) : '';
+  document.getElementById('budget').textContent = fmt(META.budget) + ' ' + t('kd');
+  const miss = META.missing || [];  // sites or models that couldn't be checked (build.py, from stats.json)
+  document.getElementById('warn').hidden = !miss.length;
+  document.getElementById('warn').innerHTML = miss.map(([s, m]) => `<p>${m ? t('miss', `<bdi>${esc(s)}</bdi>`, `<bdi>${esc(m)}</bdi>`) : t('miss_some', `<bdi>${esc(s)}</bdi>`)}</p>`).join('');
+  document.getElementById('pickline').textContent = L(META, 'pickline');
+  document.getElementById('foot').textContent = t('foot', META.checked, L(META, 'sources'));
+  document.getElementById('terms').hidden = lang === 'ar';
+  const rd = L(META, 'reading');  // how Claude read a vague request: shown only when meta.json has it
+  document.getElementById('reading').hidden = !rd;
+  document.getElementById('readlist').innerHTML = [].concat(rd || []).map(x => `<li>${esc(x)}</li>`).join('');  // the Arabic-terms guide is only for English readers
+  document.getElementById('maxpo').textContent = fmt(state.maxp) + ' ' + t('kd');
+  const mo = document.getElementById('miny').options[0]; if (mo) mo.textContent = t('any_year');
+}
+// Light / dark: follows the phone or computer until the viewer picks one; the choice is remembered.
+const dark = () => (document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+function themeBtn() {
+  const b = document.getElementById('theme');
+  b.textContent = dark() ? '☀' : '☾';
+  b.title = b.ariaLabel = t(dark() ? 'to_light' : 'to_dark');
+}
+try { const th = localStorage.getItem('cs-theme'); if (th) document.documentElement.dataset.theme = th; } catch (e) {}
+if (['light', 'dark'].includes(Q.get('theme'))) document.documentElement.dataset.theme = Q.get('theme');
+document.getElementById('theme').addEventListener('click', () => {
+  document.documentElement.dataset.theme = dark() ? 'light' : 'dark';
+  try { localStorage.setItem('cs-theme', document.documentElement.dataset.theme); } catch (e) {}
+  themeBtn();
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', themeBtn);
+document.getElementById('lang').addEventListener('click', () => {
+  lang = lang === 'ar' ? 'en' : 'ar';
+  try { localStorage.setItem('cs-lang', lang); } catch (e) {}
+  texts(); renderRail(); render(); if (cur) openCar(cur.id);
+});
+if (!CARS.some(c => c.pick)) document.getElementById('picks').hidden = true;
+const maxp = document.getElementById('maxp');
+const hi = Math.max(META.budget || 0, ...CARS.map(c => c.price));  // never hide a car that was searched
+const step = hi > 20000 ? 500 : 100; maxp.step = step;
+maxp.max = Math.ceil(hi / step) * step; maxp.value = maxp.max;
+maxp.min = Math.max(0, Math.floor(Math.min(...CARS.map(c => c.price)) / step) * step);
+state.maxp = +maxp.value;
+maxp.addEventListener('input', () => { state.maxp = +maxp.value; document.getElementById('maxpo').textContent = fmt(state.maxp) + ' ' + t('kd'); render(); });
+const miny = document.getElementById('miny');
+miny.innerHTML = '<option value="0"></option>' + [...new Set(CARS.map(c => c.year))].sort((a, b) => a - b).slice(1).map(y => `<option value="${y}">${y}+</option>`).join('');
+miny.addEventListener('change', () => { state.miny = +miny.value; render(); });
+document.getElementById('sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+texts(); renderRail(); render();
+</script>
